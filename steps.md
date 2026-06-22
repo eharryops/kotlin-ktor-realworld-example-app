@@ -17,6 +17,13 @@ Expected result:
 BUILD SUCCESSFUL
 ```
 
+Note: if a previous local run leaves port `8080` busy, stop Gradle daemons and retry:
+
+```powershell
+.\gradlew.bat --stop
+.\gradlew.bat build
+```
+
 ## 2. Run the Full Build
 
 ```powershell
