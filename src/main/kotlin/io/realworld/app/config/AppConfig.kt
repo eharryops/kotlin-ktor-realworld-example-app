@@ -11,6 +11,9 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
 import io.ktor.response.respond
 import io.ktor.routing.Routing
+import io.ktor.routing.route
+import io.realworld.app.domain.exceptions.NotFoundException
+import io.realworld.app.domain.exceptions.UnauthorizedException
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.ApplicationEngine
 import io.ktor.server.engine.ApplicationEngineFactory
@@ -80,6 +83,18 @@ fun Application.mainModule() {
         }
     }
     install(StatusPages) {
+        exception<NotFoundException> {
+            val errorResponse = ErrorResponse(mapOf("error" to listOf("detail", it.message)))
+            context.respond(HttpStatusCode.NotFound, errorResponse)
+        }
+        exception<UnauthorizedException> {
+            val errorResponse = ErrorResponse(mapOf("error" to listOf("detail", it.message)))
+            context.respond(HttpStatusCode.Unauthorized, errorResponse)
+        }
+        exception<IllegalArgumentException> {
+            val errorResponse = ErrorResponse(mapOf("error" to listOf("detail", it.message)))
+            context.respond(HttpStatusCode.UnprocessableEntity, errorResponse)
+        }
         exception(Exception::class.java) {
             val errorResponse = ErrorResponse(mapOf("error" to listOf("detail", this.toString())))
             context.respond(
@@ -93,5 +108,12 @@ fun Application.mainModule() {
         profiles(profileController)
         articles(articleController, commentController)
         tags(tagController)
+
+        route("api") {
+            users(userController)
+            profiles(profileController)
+            articles(articleController, commentController)
+            tags(tagController)
+        }
     }
 }
