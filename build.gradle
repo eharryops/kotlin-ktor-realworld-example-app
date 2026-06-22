@@ -49,3 +49,11 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     testImplementation "com.mashape.unirest:unirest-java:$unirest_version"
 }
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "16"
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "16"
+}

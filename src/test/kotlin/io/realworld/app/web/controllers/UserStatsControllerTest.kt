@@ -8,35 +8,35 @@ import io.realworld.app.domain.repository.Articles
 import io.realworld.app.domain.repository.Comments
 import io.realworld.app.domain.repository.Users
 import org.junit.Assert.assertEquals
-import org.junit.Rule
+import org.junit.ClassRule
 import org.junit.Test
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserStatsControllerTest {
-    @Rule
-    @JvmField
-    val appRule = AppRule()
+    companion object {
+        @ClassRule
+        @JvmField
+        val appRule = AppRule()
+    }
 
     @Test
     fun `get user activity stats successfully`() {
-        val email = "stats_user@gmail.com"
-        val username = "stats_user"
-        val password = "password"
-
-        appRule.http.registerUser(email, password, username)
-
+        val suffix = System.nanoTime()
+        val email = "stats_user_$suffix@gmail.com"
+        val username = "stats_user_$suffix"
         val userId = transaction {
-            Users.select { Users.username eq username }
-                .map { it[Users.id].value }
-                .first()
+            Users.insertAndGetId {
+                it[Users.email] = email
+                it[Users.username] = username
+                it[Users.password] = "password"
+            }.value
         }
 
         transaction {
             val articleId1 = Articles.insertAndGetId {
-                it[slug] = "article-1"
+                it[slug] = "article-1-$suffix"
                 it[title] = "Article 1"
                 it[description] = "Desc 1"
                 it[body] = "Body 1"
@@ -44,7 +44,7 @@ class UserStatsControllerTest {
             }.value
 
             val articleId = Articles.insertAndGetId {
-                it[slug] = "article-2"
+                it[slug] = "article-2-$suffix"
                 it[title] = "Article 2"
                 it[description] = "Desc 2"
                 it[body] = "Body 2"
