@@ -49,7 +49,9 @@ The test server startup was also a little unreliable at first. The tests sometim
 
 ## Copilot/Agent Work
 
-I prepared a GitHub issue prompt for Copilot to generate and refine tests for the new endpoint. I also added a PR template that records the prompt, what worked well, what needed cleanup, and how I would improve the workflow for a customer.
+I prepared GitHub issue #1 with a Copilot prompt to generate and refine tests for the new endpoint. Copilot assignment was not available in this repository, so I reviewed and refined the tests manually.
+
+I also added a PR template that records the prompt, what worked well, what needed cleanup, and how I would improve the workflow for a customer.
 
 The actual command steps for creating the Copilot issue are in `steps.md`.
 
@@ -92,4 +94,6 @@ One tradeoff is that I had to update some build-related versions to get the proj
 
 ## Current Status
 
-The feature is implemented, tested, documented, and ready to submit in a pull request.
+The feature is implemented, tested, documented, and submitted in pull request #2.
+
+The GitHub Actions build passed after updating the Gradle wrapper so the project could run on both required Java versions.
