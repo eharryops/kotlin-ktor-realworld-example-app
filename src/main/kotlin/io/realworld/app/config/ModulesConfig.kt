@@ -25,7 +25,7 @@ object ModulesConfig {
         bind() from singleton { ArticleController() }
     }
     private val profileModule = Kodein.Module("PROFILE") {
-        bind() from singleton { ProfileController() }
+        bind() from singleton { ProfileController(instance()) }
     }
     private val commentModule = Kodein.Module("COMMENT") {
         bind() from singleton { CommentController() }

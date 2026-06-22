@@ -2,6 +2,7 @@ package io.realworld.app.domain.service
 
 import io.realworld.app.domain.Profile
 import io.realworld.app.domain.User
+import io.realworld.app.domain.UserStats
 import io.realworld.app.domain.exceptions.NotFoundException
 import io.realworld.app.domain.exceptions.UnauthorizedException
 import io.realworld.app.domain.repository.UserRepository
@@ -59,5 +60,11 @@ class UserService(private val jwtProvider: JwtProvider, private val userReposito
         return userRepository.unfollow(email, usernameToUnfollow).let { user ->
             Profile(user.username, user.bio, user.image, false)
         }
+    }
+
+    fun getStatsByUsername(username: String): UserStats {
+        val user = userRepository.findByUsername(username)
+            ?: throw NotFoundException("User not found for stats.")
+        return userRepository.getUserStats(user.id!!)
     }
 }
